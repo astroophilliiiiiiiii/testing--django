@@ -76,3 +76,12 @@ def mark_safe(s):
     if callable(s):
         return _safety_decorator(mark_safe, s)
     return SafeString(s)
+
+
+def is_safe(s):
+    """Return ``True`` if *s* is considered safe for HTML output.
+
+    An object is regarded as safe when it is an instance of :class:`SafeData`
+    or defines a ``__html__`` method.  Anything else returns ``False``.
+    """
+    return isinstance(s, SafeData) or hasattr(s, '__html__')
