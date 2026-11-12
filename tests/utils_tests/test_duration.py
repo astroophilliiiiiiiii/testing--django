@@ -6,6 +6,7 @@ from django.utils.duration import (
     duration_iso_string,
     duration_microseconds,
     duration_string,
+    duration_total_seconds,
 )
 
 
@@ -98,3 +99,21 @@ class TestDurationMicroseconds(unittest.TestCase):
                 self.assertEqual(
                     datetime.timedelta(microseconds=duration_microseconds(delta)), delta
                 )
+
+
+class TestDurationTotalSeconds(unittest.TestCase):
+    def test_positive(self):
+        delta = datetime.timedelta(hours=2, minutes=30, seconds=15, microseconds=123456)
+        self.assertAlmostEqual(duration_total_seconds(delta), delta.total_seconds(), places=6)
+
+    def test_zero(self):
+        delta = datetime.timedelta(0)
+        self.assertAlmostEqual(duration_total_seconds(delta), 0.0, places=6)
+
+    def test_negative(self):
+        delta = -datetime.timedelta(days=1, hours=3, minutes=4, seconds=5, microseconds=600000)
+        self.assertAlmostEqual(duration_total_seconds(delta), delta.total_seconds(), places=6)
+
+    def test_microsecond_precision(self):
+        delta = datetime.timedelta(microseconds=1)
+        self.assertAlmostEqual(duration_total_seconds(delta), delta.total_seconds(), places=6)

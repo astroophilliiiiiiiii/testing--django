@@ -44,3 +44,14 @@ def duration_iso_string(duration):
 
 def duration_microseconds(delta):
     return (24 * 60 * 60 * delta.days + delta.seconds) * 1000000 + delta.microseconds
+
+
+def duration_total_seconds(delta):
+    """Return the total duration represented by *delta* in seconds as a float.
+
+    The implementation re‑uses :func:`duration_microseconds` to avoid
+    duplicating the arithmetic that normalises ``timedelta`` objects.
+    The result is expressed as ``microseconds / 1_000_000`` which matches
+    the behaviour of ``datetime.timedelta.total_seconds()``.
+    """
+    return duration_microseconds(delta) / 1_000_000
